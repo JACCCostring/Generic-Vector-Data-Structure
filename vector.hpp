@@ -97,20 +97,16 @@ namespace OST_Container
             for(int i = 0; i < _size; i++) data[i] = copy_vector.data[i];
         }
 
-         vector(vector&& copy_vector){ //move constructor
-            _capacity = copy_vector.capacity();
-            _size = copy_vector.size();
+        vector(vector&& move_vector){ //move constructor
+            _capacity = move_vector.capacity();
+            _size = move_vector.size();
             
-            data = new T[_capacity];
-            // data = copy_vector.data;
+            data = move_vector.data;
 
-            for(int i = 0; i < _capacity; i++)  data[i] = copy_vector.data[i];
+            move_vector._size = 0;
+            move_vector._capacity = 5;
 
-            copy_vector._size = 0;
-            copy_vector._capacity = 5;
-
-            // delete [] copy_vector.data;
-            // copy_vector.data = nullptr;
+            move_vector.data = nullptr;
         }
 
         vector& operator =(const vector& copy){ //copy assignment constructor 
