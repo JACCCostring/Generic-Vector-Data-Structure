@@ -75,8 +75,9 @@ namespace OST_Container
 
         vector(T element, std::size_t dimention){ //parametized constructor
             if(data == nullptr){
+                // _size = dimention;
+                // _capacity = dimention * 2 / 2 + 10;
                 data = new T[dimention];
-                _capacity = dimention;
                 for(int i = 0; i < dimention; i++) push_back(element);
             }
         }
@@ -97,7 +98,7 @@ namespace OST_Container
             for(int i = 0; i < _size; i++) data[i] = copy_vector.data[i];
         }
 
-        vector(vector&& move_vector){ //move constructor
+         vector(vector&& move_vector){ //move constructor
             _capacity = move_vector.capacity();
             _size = move_vector.size();
             
@@ -121,10 +122,19 @@ namespace OST_Container
             return *this;
         }
 
-        void set_capacity_limit(std::size_t new_limit)
-            { limit_capacity = new_limit; }
+        // void set_capacity_limit(std::size_t new_limit)
+        //     { limit_capacity = new_limit; }
+
+        void clear(){
+            T temp{};
+            for(int i = 0; i < _size; i++) data[i] = temp;
+
+            _size = 0; //reseting values back
+            _capacity = 5;
+        }
 
         T& operator[](std::size_t index){
+            if(_size == 0) data = new T[_capacity];
             if(index <= _size) return data[index]; 
 
             return data[0];
@@ -199,7 +209,8 @@ namespace OST_Container
 
         bool push_back(T new_value){
             // assert(_size < limit_capacity);
-            
+            if(data == nullptr) data = new T[_capacity];
+
             if(_size == _capacity){
                 resize();
         }
@@ -218,10 +229,8 @@ namespace OST_Container
 
          ~vector(){
             if(data != nullptr){
-                T zero{};
-                for(int i = 0; i < _size; i++) data[i] = zero;
-
-                 _size = 0;
+                clear();
+                _size = 0;
                 _capacity = 5;
 
                 delete [] data;
@@ -253,7 +262,7 @@ private:
 
         std::size_t _size = 0;
         std::size_t _capacity = 5;
-        std::size_t limit_capacity = 0;
+        // std::size_t limit_capacity = 0;
     };
     
 }
